@@ -1,0 +1,107 @@
+# Tableau--CIPE--Campus-Climate
+CIPE- Fall 2018
+
+************* General: Change from Numeric to String ***************
+if [Q1$] = 1 then 'Hilltop Campus'
+Elseif [Q1$] = 2 then 'Downtown San Francisco'
+Elseif [Q1$]= 3 then 'Orange County'
+Elseif [Q1$]= 4 then 'Pleasanton'
+ELSEIF [Q1$]= 5 then 'Presidio'
+ELSEIF [Q1$]= 6 then 'Sacramento'
+ELSEIF [Q1$]= 7 then 'San Jose'
+ELSEIF [Q1$]= 8 then 'Santa Rosa'
+ELSEIF [Q1$]= 9 then 'On-line'
+END
+
+************* General: Consolidating to make Groups ***************
+if [Q2$]= 1 then 'Undergraduate Student'
+ELSEIF  [Q2$]= 2 then 'Graduate Student'
+ELSEIF ([Q2$]= 3
+    or [Q2$]= 4 
+    or [Q2$]= 5)
+    then 'Faculty'
+ELSEIF  [Q2$]= 6 then 'Staff'
+END
+
+************* General: Turning Multiple choice segments into 1 variable ************
+if [Q83 1]= 'Yes' then 'Academic advisor'
+elseif [Q83 2]= 'Yes' then 'Alumnus/a'
+elseif [Q83 3]= 'Yes' then 'Athletic coach/trainer'
+elseif [Q83 4]= 'Yes' then 'USF media (e.g., posters, brochures, flyers, handouts, websites)'
+elseif [Q83 5]= 'Yes' then 'USF Public Safety'
+elseif [Q83 6]= 'Yes' then 'Coworker/colleague'
+elseif [Q83 7]= 'Yes' then 'Department chair/program director'
+elseif [Q83 8]= 'Yes' then 'Direct report (e.g., person who reports to me)'
+elseif [Q83 9]= 'Yes' then 'Donor'
+elseif [Q83 10]= 'Yes' then 'Faculty member/other instructional staff'
+elseif [Q83 11]= 'Yes' then 'Friend'
+elseif [Q83 12]= 'Yes' then 'Off-campus community member'
+elseif [Q83 13]= 'Yes' then 'Senior administrator (e.g., dean, vice president, provost)'
+elseif [Q83 14]= 'Yes' then 'Social networking site (e.g., Facebook, Twitter, Snapchat)'
+elseif [Q83 15]= 'Yes' then 'Staff member'
+elseif [Q83 16]= 'Yes' then 'Stranger'
+elseif [Q83 17]= 'Yes' then 'Student'
+elseif [Q83 18]= 'Yes' then 'Student staff'
+elseif [Q83 19]= 'Yes' then 'Student organization (Please specify)'
+elseif [Q83 20]= 'Yes' then 'Student teaching assistant/student lab assistant/student tutor'
+elseif [Q83 21]= 'Yes' then 'Do not know target'
+elseif [Q83 22]= 'Yes' then 'A source not listed above (Please specify)'
+else 'No Response/NA'
+end
+
+************* Overcoming Mark All that Apply on variable part **********
+SUM([Q77 1$])/TOTAL(Sum([Number of Records]))
+
+************* Overcoming Mark All that Apply as Single Variable ****************
+IF [Q83 1$] = 1
+or [Q83 2$] = 1
+or [Q83 3$] = 1
+or [Q83 4$] = 1
+or [Q83 5$] = 1
+or [Q83 6$] = 1
+or [Q83 7$] = 1
+or [Q83 8$] = 1
+or [Q83 9$] = 1
+or [Q83 10$] = 1
+or [Q83 11$] = 1
+or [Q83 12$] = 1
+or [Q83 13$] = 1
+or [Q83 14$] = 1
+or [Q83 15$] = 1
+or [Q83 16$] = 1
+or [Q83 17$] = 1
+or [Q83 18$] = 1
+or [Q83 19$] = 1
+or [Q83 20$] = 1
+or [Q83 21$] = 1
+or [Q83 22$] = 1
+THEN 'Include'
+ELSE 'Exclude'
+END
+
+*************** Viz Total *****************
+TOTAL(COUNTD([Record Id (copy)]))
+
+************* Percentage ****************
+COUNTD([Record Id (copy)]) / TOTAL(COUNTD([Record Id (copy)]))
+
+************** Generic Title ****************
+Relationship Violence by Position Status
+<Q63>
+(n=<AGG(Viz Total)>)
+
+************** Masked Count *****************
+IF SUM([Number of Records]) < 5 THEN -1
+ELSE SUM([Number of Records])
+END
+
+And then in format, make a custom number [#; <5]
+
+************** Combining Departments (Faculty/Student/Staff) *************
+IF [Q62] = "School of Nursing and Health Professions"
+OR [Q63] = "School of Nursing and Health Professions"
+OR [Q64 t] = "Nursing"
+OR [Q65 t] = "School of Nursing and Health Professions"
+THEN "School of Nursing and Health Professions"
+ELSE "Missing/Unknown"
+END
